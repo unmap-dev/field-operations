@@ -1,0 +1,24 @@
+{
+  "_provenance": {
+    "kind": "sample",
+    "note": "Synthetic: the base, the crews, the sites and every work order are made up. No site is a real well, pipeline or facility, and no location is an operator's. The real energy layers come live from the Unmap gateway, only with the Energy add-on, and are never copied here."
+  },
+  "base": { "name": "Field base, Drayton Valley", "coordinates": [-114.9768, 53.2215] },
+  "crews": [
+    { "id": "crew-a", "name": "Crew A" },
+    { "id": "crew-b", "name": "Crew B" },
+    { "id": "crew-c", "name": "Crew C" }
+  ],
+  "workOrders": [
+    { "id": "WO-2041", "title": "Wellhead inspection, lease 06-14", "category": "inspection", "asset": "well", "status": "scheduled", "priority": "high", "crew": "crew-a", "window": ["08:00", "11:00"], "coordinates": [-115.0842, 53.189], "notes": "Annual wellhead and casing inspection." },
+    { "id": "WO-2042", "title": "Pipeline repair, line P-7 at km 4.2", "category": "repair", "asset": "pipeline", "status": "dispatched", "priority": "high", "crew": "crew-b", "window": ["07:30", "15:00"], "coordinates": [-115.0213, 53.2702], "notes": "Coating damage found on the last patrol." },
+    { "id": "WO-2043", "title": "Compressor maintenance, station CS-3", "category": "maintenance", "asset": "facility", "status": "on-site", "priority": "normal", "crew": "crew-a", "window": ["11:30", "16:00"], "coordinates": [-114.8905, 53.1452], "notes": "Scheduled service, 4,000-hour interval." },
+    { "id": "WO-2044", "title": "Pump jack maintenance, lease 11-02", "category": "maintenance", "asset": "well", "status": "scheduled", "priority": "normal", "crew": "crew-c", "window": ["09:00", "12:00"], "coordinates": [-115.152, 53.2448], "notes": "Belt and bearing check." },
+    { "id": "WO-2045", "title": "Pre-construction survey, lease 03-27", "category": "survey", "asset": "site", "status": "scheduled", "priority": "low", "crew": "crew-c", "window": ["13:00", "17:00"], "coordinates": [-114.8122, 53.2879], "notes": "Stake the access road and pad corners." },
+    { "id": "WO-2046", "title": "Right-of-way patrol, line P-2", "category": "inspection", "asset": "pipeline", "status": "complete", "priority": "normal", "crew": "crew-b", "window": ["07:00", "10:00"], "coordinates": [-115.2307, 53.1675], "notes": "Vegetation and signage check." },
+    { "id": "WO-2047", "title": "Battery inspection, B-12", "category": "inspection", "asset": "facility", "status": "dispatched", "priority": "normal", "crew": "crew-a", "window": ["14:00", "16:30"], "coordinates": [-114.9411, 53.3391], "notes": "Tank level and secondary containment." },
+    { "id": "WO-2048", "title": "Flowline leak repair, lease 08-35", "category": "repair", "asset": "well", "status": "scheduled", "priority": "high", "crew": "crew-b", "window": ["10:00", "18:00"], "coordinates": [-115.3104, 53.2972], "notes": "Remote lease: access by lease road only." },
+    { "id": "WO-2049", "title": "Reclamation check, lease 15-09", "category": "survey", "asset": "site", "status": "scheduled", "priority": "low", "crew": "crew-c", "window": ["08:30", "11:30"], "coordinates": [-114.7458, 53.1838], "notes": "Vegetation cover assessment." },
+    { "id": "WO-2050", "title": "Annual inspection, lease 01-18", "category": "inspection", "asset": "well", "status": "on-site", "priority": "normal", "crew": "crew-b", "window": ["12:00", "15:00"], "coordinates": [-115.0607, 53.3528], "notes": "Pressure test witnessed by the operator." }
+  ]
+}
