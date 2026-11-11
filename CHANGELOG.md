@@ -1,5 +1,16 @@
 # @unmap/app-field-operations
 
+## 0.0.11
+
+### Patch Changes
+
+- Updated dependencies [e90aac5]
+- Updated dependencies [c8c5df8]
+  - @unmap/sdk@0.29.0
+  - @unmap/maps@0.29.0
+  - @unmap/geocoding@0.29.0
+  - @unmap/routing@0.29.0
+
 ## 0.0.10
 
 ### Patch Changes
