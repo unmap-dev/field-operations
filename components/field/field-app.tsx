@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { FlaskConicalIcon, TriangleAlertIcon } from "lucide-react";
+import { TriangleAlertIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader } from "@/components/ui/empty";
@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useRoute } from "@/hooks/use-route";
-import { ADDONS } from "@/lib/addons";
 import { AppHeader } from "@/lib/kit/app-header";
 import { API_KEY } from "@/lib/kit/config";
 import { format, type Lang } from "@/lib/kit/i18n";
@@ -42,10 +41,9 @@ function Notice({ lang }: { lang: Lang }) {
 const clock = (lang: Lang) => new Date().toLocaleTimeString(lang === "fr" ? "fr-CA" : "en-CA", { hour: "2-digit", minute: "2-digit" });
 
 /**
- * Field Operations: a synthetic energy operator's work orders on a live Unmap map. The base, the
- * crews, the sites and the lifecycle are sample data and simulation; the map, the context layers
- * and the routes are live Unmap, and with the add-ons switched on, so are the energy layers, well
- * search, identify and legal land.
+ * Field Operations: a synthetic field-service operation's work orders on a live Unmap map. The
+ * base, the crews, the sites and the lifecycle are sample data and simulation; the map, the
+ * context layers and the routes are live Unmap.
  */
 export function FieldApp() {
   const [lang, setLang] = useLang();
@@ -56,12 +54,8 @@ export function FieldApp() {
   const [moved, setMoved] = useState<Record<string, Status>>({});
   const [log, setLog] = useState<Record<string, LogEntry[]>>({});
   const [routeTo, setRouteTo] = useState<string | null>(null);
-  const [slots, setSlots] = useState<{ free: HTMLDivElement | null; energy: HTMLDivElement | null; legal: HTMLDivElement | null }>({ free: null, energy: null, legal: null });
-  // Stable ref callbacks: a new function each render would detach and reattach every slot.
-  const slotRefs = useMemo(() => {
-    const set = (name: "free" | "energy" | "legal") => (el: HTMLDivElement | null) => setSlots((prev) => (prev[name] === el ? prev : { ...prev, [name]: el }));
-    return { free: set("free"), energy: set("energy"), legal: set("legal") };
-  }, []);
+  // Where the map-aware legend is portalled to. A state setter is a stable ref callback.
+  const [legendSlot, setLegendSlot] = useState<HTMLDivElement | null>(null);
 
   const statusOf = (w: WorkOrder): Status => moved[w.id] ?? w.status;
   const withStatus = useMemo(() => op.workOrders.map((w) => ({ ...w, status: moved[w.id] ?? w.status })), [moved]);
@@ -69,7 +63,6 @@ export function FieldApp() {
   const current = withStatus.find((w) => w.id === selected) ?? null;
   const routeTarget = current && routeTo === current.id ? current.coordinates : null;
   const [route, retryRoute] = useRoute(op.base.coordinates, API_KEY ? routeTarget : null);
-  const sampleMode = ADDONS.size === 0;
 
   const advance = (w: WorkOrder) => {
     const next = nextStatus(statusOf(w));
@@ -84,13 +77,6 @@ export function FieldApp() {
       <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
         <aside className="order-last flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto border-t p-3 *:shrink-0 lg:order-first lg:w-[440px] lg:flex-none lg:border-t-0 lg:border-r">
           <Notice lang={lang} />
-          {sampleMode ? (
-            <Alert data-sample-mode="">
-              <FlaskConicalIcon />
-              <AlertTitle>{t.sampleMode}</AlertTitle>
-              <AlertDescription>{t.sampleModeNote}</AlertDescription>
-            </Alert>
-          ) : null}
           {current ? (
             <OrderDetails
               key={current.id}
@@ -154,7 +140,7 @@ export function FieldApp() {
             )}
           </section>
           <Separator />
-          {API_KEY ? <LayersPanel freeSlot={slotRefs.free} energySlot={slotRefs.energy} legalSlot={slotRefs.legal} lang={lang} /> : null}
+          {API_KEY ? <LayersPanel slot={setLegendSlot} lang={lang} /> : null}
         </aside>
         <main className="h-[45dvh] shrink-0 lg:h-auto lg:min-w-0 lg:flex-1">
           {API_KEY ? (
@@ -167,7 +153,7 @@ export function FieldApp() {
               onSelect={setSelected}
               lang={lang}
             >
-              <LayersInMap targets={slots} lang={lang} />
+              <LayersInMap target={legendSlot} lang={lang} />
             </FieldMap>
           ) : (
             <MissingKey lang={lang} />

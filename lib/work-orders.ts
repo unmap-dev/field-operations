@@ -5,10 +5,10 @@
  */
 import sample from "@/data/work-orders.sample.json";
 
-export const CATEGORIES = ["inspection", "maintenance", "repair", "survey"] as const;
+export const CATEGORIES = ["inspection", "maintenance", "repair", "install"] as const;
 export type Category = (typeof CATEGORIES)[number];
 
-export const ASSETS = ["well", "pipeline", "facility", "site"] as const;
+export const ASSETS = ["building", "equipment", "utility", "site"] as const;
 export type Asset = (typeof ASSETS)[number];
 
 /** The lifecycle, in order. A task only ever moves forward, one step at a time. */

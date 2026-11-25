@@ -2,22 +2,19 @@
 
 import { useEffect, type ReactNode } from "react";
 import type { RouteResult } from "@unmap/sdk";
-import { EnergyPopup } from "@/components/ui/energy-popup";
 import { Map } from "@/components/ui/map";
 import { MapControls } from "@/components/ui/map-controls";
 import { Marker } from "@/components/ui/marker-popup";
 import { RouteLine } from "@/components/ui/route-line";
-import { ADDONS } from "@/lib/addons";
 import { API_KEY, GATEWAY } from "@/lib/kit/config";
 import type { Lang } from "@/lib/kit/i18n";
-import { overlaysFor } from "@/lib/layers";
+import { OVERLAYS } from "@/lib/layers";
 import { useMap, useMapReady } from "@/lib/map-context";
 import { TEXT } from "@/lib/text";
 import { cn } from "@/lib/utils";
 import type { Operation, Status, WorkOrder } from "@/lib/work-orders";
 
 const reduceMotion = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const OVERLAYS = overlaysFor(ADDONS);
 
 /** Fits the base and every work order once, then follows a chosen order or its route. */
 function Camera({ points, selected, route }: { points: [number, number][]; selected: WorkOrder | null; route: RouteResult | null }) {
@@ -55,14 +52,13 @@ export interface FieldMapProps {
   route: RouteResult | null;
   onSelect: (id: string) => void;
   lang: Lang;
-  /** The panel's map-aware registry parts (legends, search boxes), as portals into the panel. */
+  /** The panel's map-aware registry parts (the layer legend), as portals into the panel. */
   children?: ReactNode;
 }
 
 /**
- * The live map: the muted basemap with the catalog overlays this deployment may show, the base,
- * every work order as a dot by status, the route to the chosen one, and with the Energy add-on
- * the registry's click-to-identify on wells, pipelines and facilities.
+ * The live map: the muted basemap with the context overlays, the base, every work order as a dot
+ * by status, and the route to the chosen one.
  */
 export function FieldMap({ operation, orders, statusOf, selected, route, onSelect, lang, children }: FieldMapProps) {
   const t = TEXT[lang];
@@ -96,7 +92,6 @@ export function FieldMap({ operation, orders, statusOf, selected, route, onSelec
             />
           );
         })}
-        {ADDONS.has("energy") ? <EnergyPopup apiKey={API_KEY} gateway={GATEWAY} /> : null}
         {children}
       </Map>
     </div>

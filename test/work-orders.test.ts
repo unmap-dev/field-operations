@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseAddons } from "@/lib/addons";
-import { ENERGY_OVERLAYS, FREE_OVERLAYS, LEGAL_OVERLAYS, overlaysFor } from "@/lib/layers";
+import { OVERLAYS, styleLayersOf } from "@/lib/layers";
 import { NO_FILTERS, OperationError, SAMPLE_OPERATION, STATUSES, byCrew, filterOrders, nextStatus, parseOperation } from "@/lib/work-orders";
 
 describe("the sample operation", () => {
@@ -17,7 +16,7 @@ describe("the sample operation", () => {
     const bad = {
       base: { name: "b", coordinates: [0, 0] },
       crews: [{ id: "a", name: "A" }],
-      workOrders: [{ id: "x", title: "t", category: "dig", asset: "well", status: "lost", priority: "high", crew: "z", window: ["8:00", "12:00"], coordinates: [0, 99], notes: "" }],
+      workOrders: [{ id: "x", title: "t", category: "dig", asset: "building", status: "lost", priority: "high", crew: "z", window: ["8:00", "12:00"], coordinates: [0, 99], notes: "" }],
     };
     try {
       parseOperation(bad);
@@ -41,7 +40,7 @@ describe("work orders", () => {
     expect(filterOrders(all, NO_FILTERS)).toHaveLength(all.length);
     expect(filterOrders(all, { ...NO_FILTERS, categories: ["repair"] }).every((w) => w.category === "repair")).toBe(true);
     expect(filterOrders(all, { ...NO_FILTERS, statuses: ["complete"] }).map((w) => w.id)).toEqual(["WO-2046"]);
-    expect(filterOrders(all, { ...NO_FILTERS, query: "cs-3" }).map((w) => w.id)).toEqual(["WO-2043"]);
+    expect(filterOrders(all, { ...NO_FILTERS, query: "rtu-3" }).map((w) => w.id)).toEqual(["WO-2043"]);
   });
 
   it("move forward through the lifecycle one step at a time and stop at complete", () => {
@@ -56,17 +55,12 @@ describe("work orders", () => {
   });
 });
 
-describe("add-ons", () => {
-  it("read only the add-ons it knows, case and spaces aside", () => {
-    expect([...parseAddons(undefined)]).toEqual([]);
-    expect([...parseAddons(" Energy , legal-land, mining")]).toEqual(["energy", "legal-land"]);
+describe("context layers", () => {
+  it("compose only the core catalog layers every plan includes, so no add-on is needed", () => {
+    expect([...OVERLAYS]).toEqual(["aboriginal-lands", "municipalities", "parks"]);
   });
 
-  it("compose free layers always, Alberta energy layers with Energy, the survey grid with either", () => {
-    expect(overlaysFor(new Set())).toEqual([...FREE_OVERLAYS]);
-    expect(overlaysFor(new Set(["legal-land"]))).toEqual([...FREE_OVERLAYS, ...LEGAL_OVERLAYS]);
-    expect(overlaysFor(new Set(["energy"]))).toEqual([...FREE_OVERLAYS, ...ENERGY_OVERLAYS, ...LEGAL_OVERLAYS]);
-    // Never the layers the gateway's records mark unverified for redistribution.
-    for (const id of ["energy.fields", "energy.ccs", "energy.geothermal"]) expect(overlaysFor(new Set(["energy"]))).not.toContain(id);
+  it("name the style layers the gateway adds for each", () => {
+    expect(styleLayersOf("parks")).toEqual(["overlay_parks_*"]);
   });
 });

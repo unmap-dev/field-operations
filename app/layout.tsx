@@ -7,7 +7,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Field Operations · Unmap app",
-  description: "A field operations map for a Canadian energy operator, built with Unmap and the Unmap component registry: sample work orders and crews, live energy layers and legal land search with the add-ons, routes from base to site with relocation warnings, and a simulated task lifecycle.",
+  description: "A field-service starter built with Unmap and the Unmap component registry: sample work orders and crews, filters by category and status, a simulated task lifecycle, routes from base to site with relocation warnings, and live Canadian context layers.",
 };
 
 export const viewport: Viewport = {
