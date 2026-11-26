@@ -44,6 +44,12 @@ nearest road it can use; the API then attaches `ENDPOINT_RELOCATED` with the dis
 shows it beside the route. Private roads and site access that is not on the map are not routable,
 and the app says so.
 
+Routes cover Canada. The app routes by car only, so an operation in one of ten US metros (Los
+Angeles, New York, Miami, SF Bay Area, Seattle, Washington DC, Austin, Boston, Denver, Chicago)
+routes too, when the base and every site are in the same metro; a site in another metro is
+`422 no_route`, and a route across the border is `422 outside_coverage`. The context layers are
+Canadian datasets and draw nothing in the US.
+
 ## Use your own operation
 
 Write `data/work-orders.sample.json` yourself: a `base` (`name`, `coordinates`), `crews` (`id`,
